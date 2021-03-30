@@ -136,7 +136,11 @@ bool QxtSignalWaiter::wait(int msec, QEventLoop::ProcessEventsFlags flags)
     // Begin waiting
     d.waiting = true;
     while (!d.ready && !d.timeout)
-        QCoreApplication::processEvents(flags);
+        QCoreApplication::processEvents(flags
+#if QT_VERSION >= 0x050000
+            , 100
+#endif
+        );
 
     // Clean up and return status
     qxt_d().stopTimer();
